@@ -1,0 +1,51 @@
+<html>
+
+<body>
+        <div>
+                <div style="margin-bottom: 4px;">
+                        <label>Max iterations</label>
+                        <div>
+                                <input id="maxIters" type="number" min="10" max="1000" value="500" step="10" />
+                        </div>
+                </div>
+                <canvas id="canvas" width="500" height="500"></canvas>
+        </div>
+        <script>
+                const WIDTH = 500;
+                const HEIGHT = 500;
+                const DARK = "black";
+                const LIGHT = "white";
+                const X_AXIS = { start: -2, end: 2 };
+                const Y_AXIS = { start: -2, end: 2 };
+
+                const maxItersEl = document.getElementById("maxIters");
+                const canvas = document.getElementById("canvas");
+                const context = canvas.getContext("2d");
+
+                function render() {
+                        const maxIterations = maxItersEl.value;
+                        for (var xPoint = 0; xPoint < WIDTH; xPoint++) {
+                                for (var yPoint = 0; yPoint < HEIGHT; yPoint++) {
+                                        var iterations = 0;
+                                        var xCoord = X_AXIS.start + (xPoint / WIDTH) * (X_AXIS.end - X_AXIS.start);
+                                        var yCoord = Y_AXIS.start + (yPoint / HEIGHT) * (Y_AXIS.end - Y_AXIS.start);
+                                        var x = 0;
+                                        var y = 0;
+                                        while (x * x + y * y <= 2 * 2 && iterations < maxIterations) {
+                                                var xTemp = x * x - y * y + xCoord;
+                                                y = 2 * x * y + yCoord;
+                                                x = xTemp;
+                                                iterations++;
+                                        }
+                                        context.fillStyle = iterations < maxIterations ? DARK : LIGHT;
+                                        context.fillRect(xPoint, yPoint, 1, 1);
+                                }
+                        }
+                }
+
+                maxItersEl.addEventListener("change", render);
+                render();
+        </script>
+</body>
+
+</html>
